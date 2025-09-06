@@ -96,7 +96,7 @@ if not filtered_df.empty:
             theta="Wind_Direction",
             color="Count",
             color_continuous_scale=px.colors.sequential.Plasma,
-            title="Wind Rose (Fixed 8 Directions)",
+            title="Wind Directions",
             width=700,   # set desired width
             height=700   # set desired height
         )
@@ -109,6 +109,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
