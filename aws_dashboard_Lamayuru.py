@@ -60,7 +60,7 @@ if not filtered_df.empty:
     fig = px.line(
         filtered_df,
         x="Time",
-        y="Percipitation (mm)",
+        y="2.Percipitation (mm)",
         color="Date",
         title="🌦️ Precipitation Over Time (by Date)",
         markers=True
@@ -72,6 +72,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
