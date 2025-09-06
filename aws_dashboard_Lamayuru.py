@@ -104,7 +104,7 @@ if not filtered_df.empty:
         # Adjust title position and spacing
         fig_wind.update_layout(
         title=dict(
-        text="Wind_Direction",
+        text="Wind Direction",
         y=0.95,        # vertical position (1.0 is top)
         x=0.5,         # horizontal center
         xanchor='center',
@@ -121,6 +121,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
