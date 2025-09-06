@@ -21,7 +21,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🌦️ AUTOMATIC WEATHER STATION (LAMAYURU)")
+st.title("AUTOMATIC WEATHER STATION (LAMAYURU)")
 
 # Load data
 @st.cache_data(ttl=60)
@@ -62,7 +62,7 @@ if not filtered_df.empty:
         x="Time",
         y="2.Percipitation (mm)",
         color="Date",
-        title="Precipitation Over Time (by Date)",
+        title="🌦️ Precipitation Over Time (by Date)",
         markers=True
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -72,6 +72,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
