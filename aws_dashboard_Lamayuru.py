@@ -100,6 +100,18 @@ if not filtered_df.empty:
             width=700,   # set desired width
             height=700   # set desired height
         )
+
+        # Adjust title position and spacing
+        fig_wind.update_layout(
+        title=dict(
+        text="Wind_Direction",
+        y=0.95,        # vertical position (1.0 is top)
+        x=0.5,         # horizontal center
+        xanchor='center',
+        yanchor='top',
+        pad=dict(t=5)  # reduce top padding
+          )
+        )
         st.plotly_chart(fig_wind, use_container_width=True)
     else:
         st.warning("⚠️ No wind data available for the selected date range.")
@@ -109,6 +121,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
