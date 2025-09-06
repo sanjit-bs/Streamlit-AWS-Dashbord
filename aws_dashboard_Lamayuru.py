@@ -6,6 +6,21 @@ import plotly.express as px
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvXNaoyp9TxTMBOhs3GJH7S2JXdWQGXaYOtC1tENpFpbGZdUPAw8XKP5vlkgo/pub?gid=2093188993&single=true&output=csv"
 
 st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
+
+# URLs for the logos
+logo1_url = "https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png"
+logo2_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png"
+
+# HTML for displaying logos
+st.markdown(
+    f"""
+    <div style='display: flex; justify-content: flex-end; gap: 10px;'>
+        <img src="{logo1_url}" width="80" alt="Central University of Jharkhand Logo">
+        <img src="{logo2_url}" width="80" alt="Ministry of Science and Technology Logo">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.title("🌦️ LAMAYURU AWS Dashboard")
 
 # Load data
@@ -55,4 +70,5 @@ if not filtered_df.empty:
     st.subheader("📊 Filtered Data")
     st.dataframe(filtered_df)
 else:
+
     st.warning("⚠️ No data available for the selected date range.")
