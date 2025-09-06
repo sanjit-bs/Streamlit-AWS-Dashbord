@@ -63,6 +63,7 @@ if not filtered_df.empty:
         y="2.Percipitation (mm)",
         color="Date",
         title="🌦️ Precipitation Over Time (by Date)",
+        labels={"2.Percipitation (mm)": "Precipitation (mm)"},
         markers=True
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -72,6 +73,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
