@@ -14,8 +14,8 @@ right_logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry
 st.markdown(
     f"""
     <div style='display: flex; justify-content: space-between; align-items: center;'>
-        <img src="{left_logo}" width="120">
-        <img src="{right_logo}" width="120">
+        <img src="{left_logo}" width="140">
+        <img src="{right_logo}" width="140">
     </div>
     """,
     unsafe_allow_html=True
@@ -72,6 +72,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
