@@ -7,7 +7,20 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvX
 
 st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
 
+# Add logos
+left_logo = "https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png"
+right_logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png"
+
+st.markdown(
+    f"""
+    <div style='display: flex; justify-content: space-between; align-items: center;'>
+        <img src="{left_logo}" width="120">
+        <img src="{right_logo}" width="120">
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
 st.title("🌦️ LAMAYURU AWS Dashboard")
 
 # Load data
@@ -59,5 +72,6 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
