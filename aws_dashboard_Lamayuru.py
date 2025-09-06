@@ -21,7 +21,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🌦️ LAMAYURU AWS Dashboard")
+st.title("🌦️ AUTOMATIC WEATHER STATION (LAMAYURU)")
 
 # Load data
 @st.cache_data(ttl=60)
@@ -72,6 +72,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
