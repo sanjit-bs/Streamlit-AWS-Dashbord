@@ -15,8 +15,8 @@ logo2_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_
 st.markdown(
     f"""
     <div style='display: flex; justify-content: flex-end; gap: 10px;'>
-        <img src="{logo1_url}" width="80" alt="Central University of Jharkhand Logo">
-        <img src="{logo2_url}" width="80" alt="Ministry of Science and Technology Logo">
+        <img src="{logo1_url}" width="120" alt="Central University of Jharkhand Logo">
+        <img src="{logo2_url}" width="120" alt="Ministry of Science and Technology Logo">
     </div>
     """,
     unsafe_allow_html=True
@@ -72,3 +72,4 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
