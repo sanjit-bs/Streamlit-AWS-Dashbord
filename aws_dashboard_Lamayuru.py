@@ -68,11 +68,48 @@ if not filtered_df.empty:
     )
     st.plotly_chart(fig, use_container_width=True)
 
+    # Wind rose plot with fixed 8 cardinal directions
+    # Convert wind direction to numeric
+    filtered_df["6. Wind Direction (degree)"] = pd.to_numeric(
+        filtered_df["6. Wind Direction (degree)"], errors="coerce"
+    )
+    wind_df = filtered_df.dropna(subset=["6. Wind Direction (degree)"])
+
+    if not wind_df.empty:
+        # Define 8 fixed cardinal directions
+        directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+
+        # Convert degrees to 8 cardinal directions
+        def deg_to_cardinal_8(deg):
+            ix = int((deg + 22.5) / 45) % 8
+            return directions[ix]
+
+        wind_df["Wind_Direction"] = wind_df["6. Wind Direction (degree)"].apply(deg_to_cardinal_8)
+
+        # Count occurrences per direction and ensure all directions are present
+        wind_counts = wind_df.groupby("Wind_Direction").size().reindex(directions, fill_value=0).reset_index(name="Count")
+
+        # Plot wind rose
+        fig_wind = px.bar_polar(
+            wind_counts,
+            r="Count",
+            theta="Wind_Direction",
+            color="Count",
+            color_continuous_scale=px.colors.sequential.Plasma,
+            title="Wind Rose (Fixed 8 Directions)",
+            width=700,   # set desired width
+            height=700   # set desired height
+        )
+        st.plotly_chart(fig_wind, use_container_width=True)
+    else:
+        st.warning("⚠️ No wind data available for the selected date range.")
+
     st.subheader("📊 Filtered Data")
     st.dataframe(filtered_df)
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
