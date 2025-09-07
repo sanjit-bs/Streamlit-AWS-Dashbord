@@ -183,7 +183,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         z-index: 1000;
-        background: #fff;
+        background: #87CEEB;  /* 🌤️ Sky blue panel */
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         padding: 8px 0;
     }
@@ -332,6 +332,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
