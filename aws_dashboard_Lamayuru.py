@@ -27,7 +27,6 @@ st.title("AUTOMATIC WEATHER STATION (LAMAYURU)")
 @st.cache_data(ttl=60)
 def load_data():
     df = pd.read_csv(CSV_URL)
-    # Detect timestamp column
     timestamp_col = df.columns[0]
     df[timestamp_col] = pd.to_datetime(df[timestamp_col], errors="coerce")
     df = df.dropna(subset=[timestamp_col])
@@ -38,6 +37,9 @@ def load_data():
 df, timestamp_col = load_data()
 df["Date"] = pd.to_datetime(df["Date"]).dt.date
 
+# Create a full daily time range (00:00–23:30, 30-min step)
+full_time_index = pd.date_range("00:00", "23:30", freq="30min").time
+
 # Date range selector
 min_date, max_date = df["Date"].min(), df["Date"].max()
 date_range = st.date_input(
@@ -47,7 +49,7 @@ date_range = st.date_input(
     max_value=max_date
 )
 
-# Handle both single-date and range inputs
+# Handle single date vs range
 if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
     start_date, end_date = [pd.to_datetime(d).date() for d in date_range]
     filtered_df = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)]
@@ -55,17 +57,31 @@ else:
     chosen_date = pd.to_datetime(date_range).date()
     filtered_df = df[df["Date"] == chosen_date]
 
+# Expand data so x-axis always 00:00 → 23:30
+expanded = []
+for date in filtered_df["Date"].unique():
+    day_df = filtered_df[filtered_df["Date"] == date].copy()
+    time_df = pd.DataFrame({"Time": full_time_index})
+    day_df = pd.merge(time_df, day_df, on="Time", how="left")
+    day_df["Date"] = date
+    expanded.append(day_df)
+
+if expanded:
+    plot_df = pd.concat(expanded)
+else:
+    plot_df = pd.DataFrame()
+
 # Plot precipitation
-if not filtered_df.empty:
+if not plot_df.empty:
     fig = px.line(
-        filtered_df,
+        plot_df,
         x="Time",
         y="2.Percipitation (mm)",
         color="Date",
-        title="🌦️ Precipitation Over Time (by Date)",
-        labels={"2.Percipitation (mm)": "Precipitation (mm)"},
+        title="Precipitation Over Time (by Date)",
         markers=True
     )
+    fig.update_xaxes(dtick=4)  # Show fewer ticks
     st.plotly_chart(fig, use_container_width=True)
 
     # Wind rose plot with fixed 8 cardinal directions
@@ -121,6 +137,7 @@ if not filtered_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
