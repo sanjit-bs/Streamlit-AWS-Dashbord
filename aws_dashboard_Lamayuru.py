@@ -205,7 +205,7 @@ st.markdown("""
         object-fit: contain;
     }
     .logo1 {
-        height: 120px;
+        height: 130px;
         width: auto;
         object-fit: contain;
     }
@@ -213,7 +213,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Add space below header so content doesn’t overlap
-st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
 
 # ---------------- Data Loading ----------------
 @st.cache_data(ttl=60)
@@ -321,6 +321,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
