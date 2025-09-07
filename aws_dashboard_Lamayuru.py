@@ -130,7 +130,7 @@ if not plot_df.empty:
         )
         
         # Config for interactive buttons
-    config = {
+        config = {
         "displaylogo": False,
         "displayModeBar": True,
         "scrollZoom": True,
@@ -138,10 +138,10 @@ if not plot_df.empty:
             "autoScale2d", "resetScale2d",
             "zoomIn2d", "zoomOut2d", "zoom2d",
             "pan2d", "toImage"
-        ]
-    }
+          ]
+        }
     
-        st.plotly_chart(fig_wind, use_container_width=True, config = config)
+        st.plotly_chart(fig_wind, use_container_width=True, config=config)
     else:
         st.warning("⚠️ No wind data available for the selected date range.")
 
@@ -150,6 +150,7 @@ if not plot_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
