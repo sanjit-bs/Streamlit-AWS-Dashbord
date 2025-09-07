@@ -195,13 +195,20 @@ st.markdown("""
         margin: auto;
         padding: 0 20px;
     }
+    .header-text {
+        text-align: center;
+        flex: 1;
+    }
     .header-title {
         font-size: 20px;
         font-weight: bold;
-        text-align: center;
-        flex: 1;
         color: #333;
     }
+    .header-subtitle {
+        font-size: 16px;
+        font-weight: normal;
+        color: #555;
+        margin-top: 2px;
     .logo {
         height: 100px;
         width: auto;
@@ -324,6 +331,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
