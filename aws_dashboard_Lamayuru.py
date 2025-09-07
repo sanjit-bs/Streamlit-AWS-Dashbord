@@ -128,7 +128,17 @@ if not plot_df.empty:
         pad=dict(t=5)  # reduce top padding
           )
         )
-        st.plotly_chart(fig_wind, use_container_width=True, config={"displaylogo": False, "modeBarButtonsToAdd": ["autoscale"]})
+        st.plotly_chart(fig_wind, use_container_width=True, config = {
+    "displaylogo": False,
+    "displayModeBar": True,
+    "scrollZoom": True,
+    "modeBarButtonsToAdd": [
+        "autoScale2d", "resetScale2d",
+        "zoomIn2d", "zoomOut2d", "zoom2d",
+        "pan2d", "select2d", "lasso2d",
+        "toImage"
+        ]
+      })
     else:
         st.warning("⚠️ No wind data available for the selected date range.")
 
@@ -137,6 +147,7 @@ if not plot_df.empty:
 else:
 
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
