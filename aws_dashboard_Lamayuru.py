@@ -167,7 +167,7 @@ st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
 st.markdown("""
     <div class="fixed-header">
         <div class="header-container">
-            <img class="logo" src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
+            <img class="logo1" src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
             <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
             <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
         </div>
@@ -201,6 +201,11 @@ st.markdown("""
     }
     .logo {
         height: 100px;
+        width: auto;
+        object-fit: contain;
+    }
+    .logo1 {
+        height: 110px;
         width: auto;
         object-fit: contain;
     }
@@ -266,7 +271,8 @@ if not plot_df.empty:
         y="2.Percipitation (mm)",
         color="Date",
         title="Precipitation Over Time (by Date)",
-        markers=True
+        markers=True,
+        labels={"2.Percipitation (mm)": "Precipitation (mm)"}
     )
     fig.update_xaxes(dtick=4)
     st.plotly_chart(fig, use_container_width=True)
@@ -315,6 +321,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
