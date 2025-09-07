@@ -168,7 +168,10 @@ st.markdown("""
     <div class="fixed-header">
         <div class="header-container">
             <img class="logo1" src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
+            <div class="header-text">
             <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
+            <div class="header-subtitle">Department of Geoinformatics</div>
+            </div>
             <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
         </div>
     </div>
@@ -321,6 +324,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
