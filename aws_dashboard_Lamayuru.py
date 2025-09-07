@@ -151,6 +151,9 @@
 
 #     st.warning("⚠️ No data available for the selected date range.")
 
+###########################################################################################################################################################
+###########################################################################################################################################################
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -161,48 +164,51 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvX
 st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
 
 # ---------------- Sticky Header ----------------
-st.markdown(
-    """
+st.markdown("""
+    <div class="fixed-header">
+        <div class="header-container">
+            <img class="logo" src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
+            <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
+            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
+        </div>
+    </div>
+
     <style>
-    .sticky-header {
+    .fixed-header {
         position: fixed;
-        top: 0;
+        top: 3.5rem;  /* 👈 Push below Streamlit’s default top bar */
         left: 0;
-        right: 0;
-        z-index: 9999;
-        background-color: white;
-        padding: 10px 20px;
-        border-bottom: 2px solid #ddd;
+        width: 100%;
+        z-index: 1000;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        padding: 8px 0;
     }
     .header-container {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-    }
-    .header-container img {
-        height: 60px;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: auto;
+        padding: 0 20px;
     }
     .header-title {
-        font-size: 28px;
+        font-size: 20px;
         font-weight: bold;
         text-align: center;
+        flex: 1;
+        color: #333;
     }
-    /* Push page content below sticky header */
-    .main > div:first-child {
-        padding-top: 100px;
+    .logo {
+        height: 100px;
+        width: auto;
+        object-fit: contain;
     }
     </style>
+""", unsafe_allow_html=True)
 
-    <div class="sticky-header">
-        <div class="header-container">
-            <img src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
-            <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU)</div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Add space below header so content doesn’t overlap
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 # ---------------- Data Loading ----------------
 @st.cache_data(ttl=60)
@@ -292,8 +298,8 @@ if not plot_df.empty:
             r="Count",
             theta="Wind_Direction",
             color="Count",
-            color_continuous_scale=px.colors.sequential.Plasma,
-            title="Wind Rose (Fixed 8 Directions)",
+            color_continuous_scale=px.colors.sequential.Rainbow,
+            title="Wind Directions",
             width=700,
             height=700
         )
@@ -309,6 +315,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
