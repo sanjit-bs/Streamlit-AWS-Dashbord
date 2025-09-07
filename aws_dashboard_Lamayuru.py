@@ -205,7 +205,7 @@ st.markdown("""
         object-fit: contain;
     }
     .logo1 {
-        height: 110px;
+        height: 120px;
         width: auto;
         object-fit: contain;
     }
@@ -321,6 +321,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
