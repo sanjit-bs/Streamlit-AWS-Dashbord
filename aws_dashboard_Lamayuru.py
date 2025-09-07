@@ -321,7 +321,7 @@ if not plot_df.empty:
             height=700
         )
         fig_wind.update_layout(
-            title=dict(text="Wind Rose (Fixed 8 Directions)", y=0.92, x=0.5, xanchor="center", yanchor="top")
+            title=dict(text="Wind Directions)", y=0.92, x=0.5, xanchor="center", yanchor="top")
         )
         st.plotly_chart(fig_wind, use_container_width=True, config={"displaylogo": False, "displayModeBar": True})
     else:
@@ -332,6 +332,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
