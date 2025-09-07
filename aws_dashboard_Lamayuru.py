@@ -209,6 +209,7 @@ st.markdown("""
         font-weight: normal;
         color: #555;
         margin-top: 2px;
+    }
     .logo {
         height: 100px;
         width: auto;
@@ -331,6 +332,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
