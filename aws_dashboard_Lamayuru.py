@@ -324,6 +324,9 @@ if not plot_df.empty:
             title=dict(text="Wind Directions)", y=0.92, x=0.5, xanchor="center", yanchor="top")
         )
         st.plotly_chart(fig_wind, use_container_width=True, config={"displaylogo": False, "displayModeBar": True})
+with col2:
+        # Show uploaded image
+        st.image("Location.jpg", caption="AWS Location", use_column_width=True)
     else:
         st.warning("⚠️ No wind data available for the selected date range.")
 
@@ -332,6 +335,7 @@ if not plot_df.empty:
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
