@@ -327,15 +327,13 @@ if not plot_df.empty:
     else:
         st.warning("⚠️ No wind data available for the selected date range.")
 
-    with col2:
-        # Show uploaded image
-        st.image("Location.jpg", caption="AWS Location", use_column_width=True)
 
     # ---------------- Data Table ----------------
     st.subheader("📊 Filtered Data")
     st.dataframe(filtered_df)
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
