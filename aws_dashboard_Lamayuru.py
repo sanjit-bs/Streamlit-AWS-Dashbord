@@ -522,20 +522,20 @@ if not plot_df.empty:
             title_text="Wind Speed and Gust Wind Speed according to Directions",
             legend=dict(
                 orientation="h",
-                yanchor="bottom", y=-0.2,
+                yanchor="bottom", y=0,
                 xanchor="center", x=0.5
             )
         )
 
         # Add general legend entries manually
         fig_dir.add_trace(
-            go.Scatter(x=[None], y=[None], mode="markers", marker=dict(color="green", size=10, symbol="star"), name="Peak")
+            go.Scatter(x=[None], y=[1], mode="markers", marker=dict(color="green", size=10, symbol="star"), name="Peak")
         )
         fig_dir.add_trace(
-            go.Scatter(x=[None], y=[None], mode="lines", line=dict(color="blue"), name="Wind Speed (m/s)")
+            go.Scatter(x=[None], y=[1], mode="lines", line=dict(color="blue"), name="Wind Speed (m/s)")
         )
         fig_dir.add_trace(
-            go.Scatter(x=[None], y=[None], mode="lines", line=dict(color="red"), name="Gust Wind Speed (m/s)")
+            go.Scatter(x=[None], y=[1], mode="lines", line=dict(color="red"), name="Gust Wind Speed (m/s)")
         )
 
         st.plotly_chart(fig_dir, use_container_width=True)
@@ -939,6 +939,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
