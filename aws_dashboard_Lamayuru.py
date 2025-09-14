@@ -489,7 +489,7 @@ if temp_col in plot_df.columns:
         fig_temp = px.line(
             plot_df,
             x="Time", y=temp_col, color="Date",
-            title="Air Temperature Over Time (by Date)",
+            title="Air Temperature Over The Time (by Date)",
             markers=True
         )
         fig_temp.update_xaxes(dtick=4)  # every 2 hours
@@ -875,6 +875,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
