@@ -318,14 +318,14 @@ if not plot_df.empty:
     totals = plot_df.groupby("Date")["Precipitation (mm)"].sum().round(1).to_dict()
 
     # Create new column for legend labels
-    plot_df["Date_with_total"] = plot_df["Date"].astype(str) + " (Total: " + plot_df["Date"].map(totals).astype(str) + " mm)"
+    plot_df["Date with total preci."] = plot_df["Date"].astype(str) + " (Total: " + plot_df["Date"].map(totals).astype(str) + " mm)"
 
     # Plot
     fig = px.line(
         plot_df,
         x="Time",
         y="Precipitation (mm)",
-        color="Date_with_total",
+        color="Date with total preci.",
         title="Precipitation Over The Time (by Date)",
         markers=True
     )
@@ -939,6 +939,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
