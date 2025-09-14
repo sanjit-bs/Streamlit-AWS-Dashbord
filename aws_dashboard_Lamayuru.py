@@ -734,7 +734,7 @@ if selected_vars:
         ),
         yaxis=dict(title=selected_vars[0]),
         legend=dict(orientation="v", y=-0.3),
-        width=1200,
+        width=1500,
         height=500,
         margin=dict(l=60, r=60, t=50, b=120),
         hovermode="x unified",  # unified hover
@@ -875,6 +875,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
