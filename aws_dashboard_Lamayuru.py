@@ -273,10 +273,10 @@ min_date, max_date = df["Date"].min(), df["Date"].max()
 col1, col2 = st.columns(2)
 
 with col1:
-    start_date = st.date_input("📅 Start Date", min_date, min_value=min_date, max_value=max_date)
+    start_date = st.date_input("📅 Start Date", min_date, min_value=min_date, max_value=max_date, format="DD/MM/YYYY")
 
 with col2:
-    end_date = st.date_input("📅 End Date", max_date, min_value=min_date, max_value=max_date)
+    end_date = st.date_input("📅 End Date", max_date, min_value=min_date, max_value=max_date, format="DD/MM/YYYY")
 
 # Ensure correct order
 if start_date > end_date:
@@ -921,6 +921,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
