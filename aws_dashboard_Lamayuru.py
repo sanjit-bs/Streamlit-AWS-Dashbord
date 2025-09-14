@@ -311,8 +311,25 @@ else:
 
 # ---------------- Precipitation Plot ----------------
 if not plot_df.empty:
-    fig = px.line(plot_df, x="Time", y="Precipitation (mm)", color="Date",
-                  title="Precipitation Over The Time (by Date)", markers=True)
+    # Ensure precipitation is numeric
+    plot_df["Precipitation (mm)"] = pd.to_numeric(plot_df["Precipitation (mm)"], errors="coerce")
+
+    # Calculate daily totals
+    totals = plot_df.groupby("Date")["Precipitation (mm)"].sum().round(1).to_dict()
+
+    # Create new column for legend labels
+    plot_df["Date_with_total"] = plot_df["Date"].astype(str) + " (Total: " + plot_df["Date"].map(totals).astype(str) + " mm)"
+
+    # Plot
+    fig = px.line(
+        plot_df,
+        x="Time",
+        y="Precipitation (mm)",
+        color="Date_with_total",
+        title="Precipitation Over The Time (by Date)",
+        markers=True
+    )
+
     fig.update_xaxes(dtick=4)
     st.plotly_chart(fig, use_container_width=True)
 
@@ -922,6 +939,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
