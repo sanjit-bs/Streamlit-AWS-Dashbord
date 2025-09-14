@@ -267,6 +267,7 @@ df["Date"] = pd.to_datetime(df["Date"]).dt.date
 # Create a full daily time range (00:00–23:30, 30-min step)
 full_time_index = pd.date_range("00:00", "23:30", freq="30min").time
 
+st.subheader("Select Date Range")
 # Date range selector
 min_date, max_date = df["Date"].min(), df["Date"].max()
 # --- Date range selector with separate fields ---
@@ -921,6 +922,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
