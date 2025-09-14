@@ -733,7 +733,7 @@ if selected_vars:
             title_standoff=30
         ),
         yaxis=dict(title=selected_vars[0]),
-        legend=dict(orientation="v", y=0, x=7),
+        legend=dict(orientation="v", y=0, x=10),
         width=1500,
         height=500,
         margin=dict(l=60, r=60, t=50, b=120),
@@ -875,6 +875,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
