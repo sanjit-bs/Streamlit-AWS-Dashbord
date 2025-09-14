@@ -381,7 +381,7 @@ if not plot_df.empty:
 
         col1, col2, col3 = st.columns([6, 3, 7])
         with col1: st.plotly_chart(fig_wind, use_container_width=True)
-        with col2: st.image("C:/Users/User/OneDrive/Pictures/Location.jpg", caption="AWS Location", width=230)
+        with col2: st.image("Location.jpg", caption="AWS Location", width=230)
         with col3: st.plotly_chart(fig_gust, use_container_width=True)
 
         # # ---------------- 8 Directional Line Graphs ----------------
@@ -921,6 +921,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
