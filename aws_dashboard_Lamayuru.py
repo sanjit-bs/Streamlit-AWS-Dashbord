@@ -234,6 +234,26 @@ st.markdown("<br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
 @st.cache_data(ttl=60)
 def load_data():
     df = pd.read_csv(CSV_URL)
+# --- Clean column names (fix spelling mistakes) ---
+    rename_dict = {
+    "8. Air Temp (C)": "Air Temp. (°C)",
+    "1.Solar (W/m2)": "Solar Radiation (W/m2)",
+    "2.Percipitation (mm)": "Precipitation (mm)",
+    "11. RH (in Fractio)": "RH (in Fractio)",
+    "9. Vapor Pressure (kPa)": "Vapour Pressure (kPa)",
+    "5. Wind Speed (m/s)": "Wind Speed (m/s)",
+    "18. Gust Wind Speed (m/s)": "Gust Wind Speed (m/s)",
+    "6. Wind Direction (degree)": "Wind Direction (degree)"
+    }
+
+    df = df.rename(columns=rename_dict)
+    timestamp_col = df.columns[0]
+    df[timestamp_col] = pd.to_datetime(df[timestamp_col], errors="coerce")
+    df = df.dropna(subset=[timestamp_col])
+    df["Date"] = df[timestamp_col].dt.date
+    df["Time"] = df[timestamp_col].dt.time
+    return df, timestamp_col
+
     timestamp_col = df.columns[0]
     df[timestamp_col] = pd.to_datetime(df[timestamp_col], errors="coerce")
     df = df.dropna(subset=[timestamp_col])
@@ -249,12 +269,22 @@ full_time_index = pd.date_range("00:00", "23:30", freq="30min").time
 
 # Date range selector
 min_date, max_date = df["Date"].min(), df["Date"].max()
-date_range = st.date_input(
-    "📅 Select Date Range",
-    [min_date, max_date],
-    min_value=min_date,
-    max_value=max_date
-)
+# --- Date range selector with separate fields ---
+col1, col2 = st.columns(2)
+
+with col1:
+    start_date = st.date_input("📅 Start Date", min_date, min_value=min_date, max_value=max_date)
+
+with col2:
+    end_date = st.date_input("📅 End Date", max_date, min_value=min_date, max_value=max_date)
+
+# Ensure correct order
+if start_date > end_date:
+    st.error("⚠️ Start Date must be before End Date")
+else:
+    date_range = (start_date, end_date)
+# --- Info note ---
+st.caption("<span style='color:red'>* Data is available for seven days only", unsafe_allow_html=True)
 
 # Handle single date vs range
 if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
@@ -280,13 +310,13 @@ else:
 
 # ---------------- Precipitation Plot ----------------
 if not plot_df.empty:
-    fig = px.line(plot_df, x="Time", y="2.Percipitation (mm)", color="Date",
-                  title="Precipitation Over Time (by Date)", markers=True, labels={"2.Percipitation (mm)": "Precipitation (mm)"})
+    fig = px.line(plot_df, x="Time", y="Precipitation (mm)", color="Date",
+                  title="Precipitation Over The Time (by Date)", markers=True)
     fig.update_xaxes(dtick=4)
     st.plotly_chart(fig, use_container_width=True)
 
     # 👉 Total precipitation panel
-    precip_col = "2.Percipitation (mm)"
+    precip_col = "Precipitation (mm)"
     filtered_df[precip_col] = pd.to_numeric(filtered_df[precip_col], errors="coerce")
     total_precip = filtered_df[precip_col].sum(skipna=True)
 
@@ -300,12 +330,12 @@ if not plot_df.empty:
     )
 
     # ---------------- Wind Roses ----------------
-    filtered_df["6. Wind Direction (degree)"] = pd.to_numeric(filtered_df["6. Wind Direction (degree)"], errors="coerce")
-    filtered_df["5. Wind Speed (m/s)"] = pd.to_numeric(filtered_df["5. Wind Speed (m/s)"], errors="coerce")
-    filtered_df["18. Gust Wind Speed (m/s)"] = pd.to_numeric(filtered_df["18. Gust Wind Speed (m/s)"], errors="coerce")
+    filtered_df["Wind Direction (degree)"] = pd.to_numeric(filtered_df["Wind Direction (degree)"], errors="coerce")
+    filtered_df["Wind Speed (m/s)"] = pd.to_numeric(filtered_df["Wind Speed (m/s)"], errors="coerce")
+    filtered_df["Gust Wind Speed (m/s)"] = pd.to_numeric(filtered_df["Gust Wind Speed (m/s)"], errors="coerce")
 
-    wind_df = filtered_df.dropna(subset=["6. Wind Direction (degree)"])
-    gust_df = filtered_df.dropna(subset=["6. Wind Direction (degree)", "18. Gust Wind Speed (m/s)"])
+    wind_df = filtered_df.dropna(subset=["Wind Direction (degree)"])
+    gust_df = filtered_df.dropna(subset=["Wind Direction (degree)", "Gust Wind Speed (m/s)"])
 
     if not wind_df.empty:
         directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
@@ -314,30 +344,44 @@ if not plot_df.empty:
             ix = int((deg + 22.5) / 45) % 8
             return directions[ix]
         
-        if "6. Wind Direction (degree)" in filtered_df.columns:
+        if "Wind Direction (degree)" in filtered_df.columns:
             filtered_df["Wind_Direction"] = pd.to_numeric(
-                filtered_df["6. Wind Direction (degree)"], errors="coerce"
+                filtered_df["Wind Direction (degree)"], errors="coerce"
          ).dropna().apply(deg_to_cardinal_8)
 
-        wind_df["Wind_Direction"] = wind_df["6. Wind Direction (degree)"].apply(deg_to_cardinal_8)
-        gust_df["Wind_Direction"] = gust_df["6. Wind Direction (degree)"].apply(deg_to_cardinal_8)
+        wind_df["Wind_Direction"] = wind_df["Wind Direction (degree)"].apply(deg_to_cardinal_8)
+        gust_df["Wind_Direction"] = gust_df["Wind Direction (degree)"].apply(deg_to_cardinal_8)
 
         # Wind Rose (frequency)
         wind_counts = wind_df.groupby("Wind_Direction").size().reindex(directions, fill_value=0).reset_index(name="Count")
         fig_wind = px.bar_polar(wind_counts, r="Count", theta="Wind_Direction", color="Count",
                                 color_continuous_scale=px.colors.sequential.Plasma, width=600, height=600)
         fig_wind.update_layout(title=dict(text="Wind Flow Directions (Count)", y=0.95, x=0.5))
+        fig_wind.update_layout(
+         polar=dict(
+         radialaxis=dict(
+            tickfont=dict(color="black")  # <- makes radial tick labels red
+                        )
+                   )
+               )
 
         # Gust Rose (speed)
-        gust_counts = gust_df.groupby("Wind_Direction")["18. Gust Wind Speed (m/s)"].mean().reindex(directions, fill_value=0).reset_index(name="Avg Gust Speed")
+        gust_counts = gust_df.groupby("Wind_Direction")["Gust Wind Speed (m/s)"].mean().reindex(directions, fill_value=0).reset_index(name="Avg Gust Speed")
         fig_gust = px.bar_polar(gust_counts, r="Avg Gust Speed", theta="Wind_Direction",
                                 color="Avg Gust Speed", color_continuous_scale=px.colors.sequential.Viridis,
-                                width=600, height=600, title="Gust Wind Flow (Speed & Direction)")
+                                width=600, height=600, title="Gust Wind Flow (Speed & Directions)")
         fig_gust.update_layout(coloraxis_colorbar=dict(title="Speed (m/s)"))
+        fig_gust.update_layout(
+         polar=dict(
+         radialaxis=dict(
+            tickfont=dict(color="black")  # <- makes radial tick labels red
+                        )
+                   )
+               )
 
         col1, col2, col3 = st.columns([6, 3, 7])
         with col1: st.plotly_chart(fig_wind, use_container_width=True)
-        with col2: st.image("Location.jpg", caption="AWS Location", width=230)
+        with col2: st.image("C:/Users/User/OneDrive/Pictures/Location.jpg", caption="AWS Location", width=230)
         with col3: st.plotly_chart(fig_gust, use_container_width=True)
 
         # # ---------------- 8 Directional Line Graphs ----------------
@@ -400,7 +444,7 @@ if not plot_df.empty:
                     # Wind Speed line
                     fig_dir.add_trace(
                         go.Scatter(
-                            x=sub_df["Time"], y=sub_df["5. Wind Speed (m/s)"],
+                            x=sub_df["Time"], y=sub_df["Wind Speed (m/s)"],
                             mode="lines+markers",
                             name=f"{date} - Wind",
                             line=dict(color="blue"),
@@ -414,7 +458,7 @@ if not plot_df.empty:
                     # Gust Wind Speed line
                     fig_dir.add_trace(
                         go.Scatter(
-                            x=sub_df["Time"], y=sub_df["18. Gust Wind Speed (m/s)"],
+                            x=sub_df["Time"], y=sub_df["Gust Wind Speed (m/s)"],
                             mode="lines+markers",
                             name=f"{date} - Gust",
                             line=dict(color="red"),
@@ -426,10 +470,10 @@ if not plot_df.empty:
                     )
 
                     # Highlight Peaks (Wind Speed)
-                    peaks_wind = sub_df[sub_df["5. Wind Speed (m/s)"] == sub_df["5. Wind Speed (m/s)"].max()]
+                    peaks_wind = sub_df[sub_df["Wind Speed (m/s)"] == sub_df["Wind Speed (m/s)"].max()]
                     fig_dir.add_trace(
                         go.Scatter(
-                            x=peaks_wind["Time"], y=peaks_wind["5. Wind Speed (m/s)"],
+                            x=peaks_wind["Time"], y=peaks_wind["Wind Speed (m/s)"],
                             mode="markers+text",
                             #text=["Peak"],
                             textposition="top center",
@@ -441,10 +485,10 @@ if not plot_df.empty:
                     )
 
                     # Highlight Peaks (Gust Speed)
-                    peaks_gust = sub_df[sub_df["18. Gust Wind Speed (m/s)"] == sub_df["18. Gust Wind Speed (m/s)"].max()]
+                    peaks_gust = sub_df[sub_df["Gust Wind Speed (m/s)"] == sub_df["Gust Wind Speed (m/s)"].max()]
                     fig_dir.add_trace(
                         go.Scatter(
-                            x=peaks_gust["Time"], y=peaks_gust["18. Gust Wind Speed (m/s)"],
+                            x=peaks_gust["Time"], y=peaks_gust["Gust Wind Speed (m/s)"],
                             mode="markers+text",
                             # text=["Peak"],
                             textposition="top center",
@@ -479,7 +523,7 @@ if not plot_df.empty:
         st.plotly_chart(fig_dir, use_container_width=True)
     
          # ---------------- Temperature Plot ----------------
-temp_col = "8. Air Temp (C)"
+temp_col = "Air Temp. (°C)"
 if temp_col in plot_df.columns:
     # Convert to numeric safely
     plot_df[temp_col] = pd.to_numeric(plot_df[temp_col], errors="coerce")
@@ -489,7 +533,7 @@ if temp_col in plot_df.columns:
         fig_temp = px.line(
             plot_df,
             x="Time", y=temp_col, color="Date",
-            title="Air Temperature Over The Time (by Date)",
+            title="Air Temperature Over Time (by Date)",
             markers=True
         )
         fig_temp.update_xaxes(dtick=4)  # every 2 hours
@@ -515,7 +559,7 @@ if temp_col in plot_df.columns:
 
 
         # ---------------- Solar Radiation Plot ----------------
-solar_col = "1.Solar (W/m2)"
+solar_col = "Solar Radiation (W/m2)"
 if solar_col in plot_df.columns:
     # Convert safely
     plot_df[solar_col] = pd.to_numeric(plot_df[solar_col], errors="coerce")
@@ -525,7 +569,7 @@ if solar_col in plot_df.columns:
         fig_solar = px.line(
             plot_df,
             x="Time", y=solar_col, color="Date",
-            title="Solar Radiation Over Time (by Date)",
+            title="Solar Radiation Over The Time (by Date)",
             markers=True
         )
         fig_solar.update_xaxes(dtick=4)  # every 2 hours
@@ -556,7 +600,7 @@ if solar_col in plot_df.columns:
     )
 
     # ---------------- Relative Humidity Plot ----------------
-    rh_col = "11. RH (in Fractio)"
+    rh_col = "RH (in Fractio)"
 
     if rh_col in plot_df.columns:
     # Convert fraction to percentage
@@ -564,16 +608,16 @@ if solar_col in plot_df.columns:
       filtered_df[rh_col] = pd.to_numeric(filtered_df[rh_col], errors="coerce") * 100
 
     # Rename column for clarity in plots and table
-      plot_df.rename(columns={rh_col: "11. RH (%)"}, inplace=True)
-      filtered_df.rename(columns={rh_col: "11. RH (%)"}, inplace=True)
-      rh_col = "11. RH (%)"  # update reference
+      plot_df.rename(columns={rh_col: "RH (%)"}, inplace=True)
+      filtered_df.rename(columns={rh_col: "RH (%)"}, inplace=True)
+      rh_col = "RH (%)"  # update reference
 
       fig_rh = px.line(
         plot_df,
         x="Time",
         y=rh_col,
         color="Date",
-        title="Relative Humidity Over Time (by Date)",
+        title="Relative Humidity Over The Time (by Date)",
         markers=True
     )
       fig_rh.update_traces(mode="lines+markers")
@@ -585,7 +629,7 @@ if solar_col in plot_df.columns:
       st.plotly_chart(fig_rh, use_container_width=True)
 
     # ---------------- Vapor Pressure Plot ----------------
-    vp_col = "9. Vapor Pressure (kPa)"
+    vp_col = "Vapour Pressure (kPa)"
 
     if vp_col in plot_df.columns:
      plot_df[vp_col] = pd.to_numeric(plot_df[vp_col], errors="coerce")
@@ -596,7 +640,7 @@ if solar_col in plot_df.columns:
         x="Time",
         y=vp_col,
         color="Date",
-        title="Vapor Pressure Over Time (by Date)",
+        title="Vapor Pressure Over The Time (by Date)",
         markers=True
     )
      fig_vp.update_traces(mode="lines+markers")
@@ -611,13 +655,13 @@ if solar_col in plot_df.columns:
 
 # Pick only the relevant numeric columns
      corr_cols = [
-     "2.Percipitation (mm)",
-     "11. RH (%)",
-     "9. Vapor Pressure (kPa)",
-     "8. Air Temp (C)",
-     "1.Solar (W/m2)",
-     "5. Wind Speed (m/s)",
-     "18. Gust Wind Speed (m/s)"
+     "Precipitation (mm)",
+     "RH (%)",
+     "Vapour Pressure (kPa)",
+     "Air Temp. (°C)",
+     "Solar Radiation (W/m2)",
+     "Wind Speed (m/s)",
+     "Gust Wind Speed (m/s)"
 ]
 
 # Ensure numeric
@@ -640,16 +684,16 @@ if solar_col in plot_df.columns:
      st.pyplot(fig)
 
      # ---------------- Scatter Plot for Relationships ----------------
-     st.subheader("🔍 Explore Variable Relationships with Precipitation")
+     st.subheader("🔍 Relationship of Variables with Precipitation")
 
  # Dropdowns for variable selection
     options = [
-     "8. Air Temp (C)",
-     "1.Solar (W/m2)",
-     "11. RH (%)",
-     "9. Vapor Pressure (kPa)",
-     "5. Wind Speed (m/s)",
-     "18. Gust Wind Speed (m/s)"
+     "Air Temp. (°C)",
+     "Solar Radiation (W/m2)",
+     "RH (%)",
+     "Vapour Pressure (kPa)",
+     "Wind Speed (m/s)",
+     "Gust Wind Speed (m/s)"
 ]
 
     x_var = st.selectbox("Select Variable (X-axis)", options)
@@ -657,13 +701,13 @@ if solar_col in plot_df.columns:
 # Ensure numeric
     scatter_df = filtered_df.copy()
     scatter_df[x_var] = pd.to_numeric(scatter_df[x_var], errors="coerce")
-    scatter_df["2.Percipitation (mm)"] = pd.to_numeric(scatter_df["2.Percipitation (mm)"], errors="coerce")
+    scatter_df["Precipitation (mm)"] = pd.to_numeric(scatter_df["Precipitation (mm)"], errors="coerce")
 
-    if not scatter_df[[x_var, "2.Percipitation (mm)"]].dropna().empty:
+    if not scatter_df[[x_var, "Precipitation (mm)"]].dropna().empty:
      fig_scatter = px.scatter(
         scatter_df,
         x=x_var,
-        y="2.Percipitation (mm)",
+        y="Precipitation (mm)",
         color="Date",
         trendline="ols",
         title=f"Precipitation vs {x_var}"
@@ -671,24 +715,26 @@ if solar_col in plot_df.columns:
      st.plotly_chart(fig_scatter, use_container_width=True)
 
 
+######-------------Multi-Variable Time Series---------####################
+
+st.subheader("🔍 Multi-Variable Time Series")
+
 # --- Dropdown options ---
 options = [
-    "8. Air Temp (C)",
-    "1.Solar (W/m2)",
-    "2.Percipitation (mm)",
-    "11. RH (%)",
-    "9. Vapor Pressure (kPa)",
-    "5. Wind Speed (m/s)",
-    "18. Gust Wind Speed (m/s)"
+    "Air Temp. (°C)",
+    "Solar Radiation (W/m2)",
+    "Precipitation (mm)",
+    "RH (%)",
+    "Vapour Pressure (kPa)",
+    "Wind Speed (m/s)",
+    "Gust Wind Speed (m/s)"
 ]
-
-######-------------Multi-Variable Time Series---------####################
 
 # --- UI for variable selection ---
 selected_vars = st.multiselect(
     "📊 Select variables to compare",
     options=options,
-    default=["8. Air Temp (C)", "11. RH (%)"]
+    default=["Air Temp. (°C)", "RH (%)"]
 )
 
 if selected_vars:
@@ -725,15 +771,15 @@ if selected_vars:
 
     # Layout with main x-axis (time)
     fig.update_layout(
-        title="Multi-Variable Time Series",
+        #title="Multi-Variable Time Series",
         xaxis=dict(
-            title="Date and Time",
+            title="Time of Day",
             tickformat="%H:%M",
             showgrid=True,
-            title_standoff=35
+            title_standoff=30
         ),
         yaxis=dict(title=selected_vars[0]),
-        legend=dict(orientation="v", y=0, x=10),
+        legend=dict(orientation="v", y=0, x=5),
         width=1500,
         height=500,
         margin=dict(l=60, r=60, t=50, b=120),
