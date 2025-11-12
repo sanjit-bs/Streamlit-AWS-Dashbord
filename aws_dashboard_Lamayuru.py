@@ -166,42 +166,42 @@ import matplotlib.pyplot as plt
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvXNaoyp9TxTMBOhs3GJH7S2JXdWQGXaYOtC1tENpFpbGZdUPAw8XKP5vlkgo/pub?gid=2093188993&single=true&output=csv"
 # st.title("AWS Dashboard - Lamayuru")
 
-try:
-    df = pd.read_csv(CSV_URL)
+# try:
+#     df = pd.read_csv(CSV_URL)
 
-    # If CSV is empty or only has headers
-    if df.empty or len(df.columns) == 0:
-        st.warning("⚠️ No Data Available")
-        st.stop()  # Stop the app here to avoid widget errors
+#     # If CSV is empty or only has headers
+#     if df.empty or len(df.columns) == 0:
+#         st.warning("⚠️ No Data Available")
+#         st.stop()  # Stop the app here to avoid widget errors
 
-    # Otherwise, continue normally
-    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-    df = df.dropna(subset=['Date'])
+#     # Otherwise, continue normally
+#     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+#     df = df.dropna(subset=['Date'])
 
-    min_date = df['Date'].min().date()
-    max_date = df['Date'].max().date()
+#     min_date = df['Date'].min().date()
+#     max_date = df['Date'].max().date()
 
-    start_date = st.date_input(
-        "📅 Start Date",
-        value=min_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
-    end_date = st.date_input(
-        "📅 End Date",
-        value=max_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
+#     start_date = st.date_input(
+#         "📅 Start Date",
+#         value=min_date,
+#         min_value=min_date,
+#         max_value=max_date,
+#         format="DD/MM/YYYY"
+#     )
+#     end_date = st.date_input(
+#         "📅 End Date",
+#         value=max_date,
+#         min_value=min_date,
+#         max_value=max_date,
+#         format="DD/MM/YYYY"
+#     )
 
-    st.dataframe(df)
+#     st.dataframe(df)
 
-except Exception as e:
-    st.error(f"❌ Error loading data: {e}")
+# except Exception as e:
+#     st.error(f"❌ Error loading data: {e}")
 
-st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
+# st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
 
 # ---------------- Sticky Header ----------------
 st.markdown("""
@@ -1010,6 +1010,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
