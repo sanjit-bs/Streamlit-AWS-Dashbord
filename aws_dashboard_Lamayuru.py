@@ -164,6 +164,14 @@ import matplotlib.pyplot as plt
 
 # Google Sheet CSV link
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvXNaoyp9TxTMBOhs3GJH7S2JXdWQGXaYOtC1tENpFpbGZdUPAw8XKP5vlkgo/pub?gid=2093188993&single=true&output=csv"
+try:
+    df = pd.read_csv(CSV_URL)
+    if df.empty:
+        st.warning("No Data")
+    else:
+        st.dataframe(df)
+except Exception as e:
+    st.error("Error loading data. Please check the source link.")
 
 st.set_page_config(page_title="LAMAYURU AWS Dashboard", layout="wide")
 
@@ -939,6 +947,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
