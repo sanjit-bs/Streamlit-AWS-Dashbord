@@ -169,7 +169,7 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvX
 st.markdown("""
     <div class="fixed-header">
         <div class="header-container">
-            <img class="logo1" src="https://cuetsamarth.com/wp-content/uploads/2024/01/CENTRAL_UNIVERSITY_OF_JHARKHAND_logo-removebg-preview.png" alt="CUJ Logo">
+            <img class="logo1" src="https://github.com/sanjit-bs/Streamlit-AWS-Dashbord/blob/main/CUJ_logo.png" alt="CUJ Logo">
             <div class="header-text">
             <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
             <div class="header-subtitle">Department of Geoinformatics</div>
@@ -972,6 +972,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
