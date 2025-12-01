@@ -264,7 +264,7 @@ try:
 #     st.error(f"❌ Error loading data: {e}")
 
 # ---------------- Data Loading ----------------
-@st.cache_data(ttl=60)
+st.cache_data(ttl=60)
 def load_data():
     df = pd.read_csv(CSV_URL)
 # --- Clean column names (fix spelling mistakes) ---
@@ -972,6 +972,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
