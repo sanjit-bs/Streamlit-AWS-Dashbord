@@ -260,8 +260,8 @@ try:
 
     st.dataframe(df)
 
-# except Exception as e:
-#     st.error(f"❌ Error loading data: {e}")
+except Exception as e:
+    st.error(f"❌ Error loading data: {e}")
 
 # ---------------- Data Loading ----------------
 st.cache_data(ttl=60)
@@ -972,6 +972,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
