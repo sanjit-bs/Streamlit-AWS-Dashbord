@@ -166,30 +166,27 @@ import matplotlib.pyplot as plt
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvXNaoyp9TxTMBOhs3GJH7S2JXdWQGXaYOtC1tENpFpbGZdUPAw8XKP5vlkgo/pub?gid=2093188993&single=true&output=csv"
 
 # ---------------- Sticky Header ----------------
+# ---------------- Sticky Header ----------------
 st.markdown("""
     <div class="fixed-header">
         <div class="header-container">
             <img class="logo" src="https://raw.githubusercontent.com/sanjit-bs/Streamlit-AWS-Dashbord/main/CUJ_logo.png" alt="CUJ Logo">
-            
             <div class="header-text">
-    <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
-    <div class="header-subtitle">Department of Geoinformatics</div>
-</div>
-
-<img class="logo1" 
-     src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" 
-     alt="MST Logo">
+            <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
+            <div class="header-subtitle">Department of Geoinformatics</div>
+            </div>
+            <img class="logo1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
         </div>
     </div>
 
     <style>
     .fixed-header {
         position: fixed;
-        top: 3.5rem;
+        top: 3.5rem;  /* 👈 Push below Streamlit’s default top bar */
         left: 0;
         width: 100%;
         z-index: 1000;
-        background: #87CEEB;
+        background: #87CEEB;  /* 🌤️ Sky blue panel */
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         padding: 5px 0;
     }
@@ -208,7 +205,7 @@ st.markdown("""
     .header-title {
         font-size: 24px;
         font-weight: bold;
-        color: #02590F;
+        color: #02590F; /* DarkGreen */
     }
     .header-subtitle {
         font-size: 20px;
