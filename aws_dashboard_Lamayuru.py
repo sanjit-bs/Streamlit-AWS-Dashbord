@@ -240,8 +240,8 @@ try:
     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
     df = df.dropna(subset=['Date'])
 
-    min_date = df['Date'].min().date()
-    max_date = df['Date'].max().date()
+    min_date = df['Timestamp'].min().date()
+    max_date = df['Timestamp'].max().date()
 
     start_date = st.date_input(
         "📅 Start Date",
@@ -972,6 +972,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
