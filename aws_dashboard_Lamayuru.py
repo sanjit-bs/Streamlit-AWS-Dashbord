@@ -243,22 +243,22 @@ try:
     min_date = df['Timestamp'].min().date()
     max_date = df['Timestamp'].max().date()
 
-    start_date = st.date_input(
-        "📅 Start Date",
-        value=min_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
-    end_date = st.date_input(
-        "📅 End Date",
-        value=max_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
+    # start_date = st.date_input(
+    #     "📅 Start Date",
+    #     value=min_date,
+    #     min_value=min_date,
+    #     max_value=max_date,
+    #     format="DD/MM/YYYY"
+    # )
+    # end_date = st.date_input(
+    #     "📅 End Date",
+    #     value=max_date,
+    #     min_value=min_date,
+    #     max_value=max_date,
+    #     format="DD/MM/YYYY"
+    # )
 
-    st.dataframe(df)
+    # st.dataframe(df)
 
 except Exception as e:
     st.error(f"❌ Error loading data: {e}")
@@ -331,6 +331,7 @@ else:
     date_range = (start_date, end_date)
 # --- Info note ---
 st.caption("<span style='color:red'>* Data is available for seven days only", unsafe_allow_html=True)
+st.dataframe(df)
 
 # Handle single date vs range
 if isinstance(date_range, (list, tuple)) and len(date_range) == 2:
@@ -984,6 +985,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
