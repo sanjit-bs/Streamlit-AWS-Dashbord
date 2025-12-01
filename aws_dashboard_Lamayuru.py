@@ -237,8 +237,8 @@ try:
         st.stop()  # Stop the app here to avoid widget errors
 
     # Otherwise, continue normally
-    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-    df = df.dropna(subset=['Date'])
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
+    df = df.dropna(subset=['Timestamp'])
 
     min_date = df['Timestamp'].min().date()
     max_date = df['Timestamp'].max().date()
@@ -972,6 +972,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
