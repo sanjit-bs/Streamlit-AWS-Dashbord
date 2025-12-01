@@ -218,7 +218,7 @@ st.markdown("""
         object-fit: contain;
     }
     .logo1 {
-        height: 150px;
+        height: 100px;
         width: auto;
         object-fit: contain;
     }
@@ -984,6 +984,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
