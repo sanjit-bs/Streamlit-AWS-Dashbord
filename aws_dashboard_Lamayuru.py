@@ -169,12 +169,12 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyAh0U0ampsm5z8VncvX
 st.markdown("""
     <div class="fixed-header">
         <div class="header-container">
-            <img class="logo1" src="CUJ_logo.png" alt="CUJ Logo">
+            <img class="logo" src="https://github.com/sanjit-bs/Streamlit-AWS-Dashbord/blob/main/CUJ_logo.png" alt="CUJ Logo">
             <div class="header-text">
             <div class="header-title">AUTOMATIC WEATHER STATION (LAMAYURU, LADAKH)</div>
             <div class="header-subtitle">Department of Geoinformatics</div>
             </div>
-            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
+            <img class="logo1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Ministry_of_Science_and_Technology_India.svg/1200px-Ministry_of_Science_and_Technology_India.svg.png" alt="MST Logo">
         </div>
     </div>
 
@@ -236,35 +236,35 @@ try:
         st.warning("⚠️ No Data Available")
         st.stop()  # Stop the app here to avoid widget errors
 
-    # Otherwise, continue normally
-    df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
-    df = df.dropna(subset=['Timestamp'])
+#     # Otherwise, continue normally
+#     df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
+#     df = df.dropna(subset=['Timestamp'])
 
-    min_date = df['Timestamp'].min().date()
-    max_date = df['Timestamp'].max().date()
+#     min_date = df['Timestamp'].min().date()
+#     max_date = df['Timestamp'].max().date()
 
-    start_date = st.date_input(
-        "📅 Start Date",
-        value=min_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
-    end_date = st.date_input(
-        "📅 End Date",
-        value=max_date,
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
-    )
+#     start_date = st.date_input(
+#         "📅 Start Date",
+#         value=min_date,
+#         min_value=min_date,
+#         max_value=max_date,
+#         format="DD/MM/YYYY"
+#     )
+#     end_date = st.date_input(
+#         "📅 End Date",
+#         value=max_date,
+#         min_value=min_date,
+#         max_value=max_date,
+#         format="DD/MM/YYYY"
+#     )
 
-    st.dataframe(df)
+#     st.dataframe(df)
 
-except Exception as e:
-    st.error(f"❌ Error loading data: {e}")
+# except Exception as e:
+#     st.error(f"❌ Error loading data: {e}")
 
-# ---------------- Data Loading ----------------
-st.cache_data(ttl=60)
+# # ---------------- Data Loading ----------------
+# st.cache_data(ttl=60)
 def load_data():
     df = pd.read_csv(CSV_URL)
 # --- Clean column names (fix spelling mistakes) ---
@@ -984,6 +984,7 @@ if selected_vars:
 
 else:
     st.warning("⚠️ No data available for the selected date range.")
+
 
 
 
